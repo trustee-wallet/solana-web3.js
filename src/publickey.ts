@@ -3,6 +3,7 @@ import bs58 from 'bs58';
 import {Buffer} from 'buffer';
 import nacl from 'tweetnacl';
 import {sha256} from 'crypto-hash';
+import BlocksoftCryptoUtils from '@crypto/common/BlocksoftCryptoUtils'
 
 import {Struct, SOLANA_SCHEMA} from './util/borsh-schema';
 import {toBuffer} from './util/to-buffer';
@@ -147,7 +148,7 @@ export class PublicKey extends Struct {
       programId.toBuffer(),
       Buffer.from('ProgramDerivedAddress'),
     ]);
-    let hash = await sha256(new Uint8Array(buffer));
+    let hash = Buffer.from(await BlocksoftCryptoUtils.sha256(buffer.toString('hex')), 'hex')
     let publicKeyBytes = new BN(hash, 16).toArray(undefined, 32);
     if (is_on_curve(publicKeyBytes)) {
       throw new Error(`Invalid seeds, address must fall off the curve`);
