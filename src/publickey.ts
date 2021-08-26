@@ -125,7 +125,7 @@ export class PublicKey extends Struct {
       Buffer.from(seed),
       programId.toBuffer(),
     ]);
-    const hash = await sha256(new Uint8Array(buffer));
+    let hash = Buffer.from(await BlocksoftCryptoUtils.sha256(buffer.toString('hex')), 'hex')
     return new PublicKey(Buffer.from(hash, 'hex'));
   }
 
