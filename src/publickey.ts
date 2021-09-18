@@ -3,6 +3,7 @@ import bs58 from 'bs58';
 import {Buffer} from 'buffer';
 import nacl from 'tweetnacl';
 import {sha256} from 'crypto-hash';
+import BlocksoftCryptoLog from '@crypto/common/BlocksoftCryptoLog'
 import BlocksoftCryptoUtils from '@crypto/common/BlocksoftCryptoUtils'
 
 import {Struct, SOLANA_SCHEMA} from './util/borsh-schema';
@@ -125,6 +126,7 @@ export class PublicKey extends Struct {
       Buffer.from(seed),
       programId.toBuffer(),
     ]);
+    await BlocksoftCryptoLog.log('@solana createWithSeed started')
     let hash = Buffer.from(await BlocksoftCryptoUtils.sha256(buffer.toString('hex')), 'hex')
     return new PublicKey(Buffer.from(hash, 'hex'));
   }
@@ -148,6 +150,7 @@ export class PublicKey extends Struct {
       programId.toBuffer(),
       Buffer.from('ProgramDerivedAddress'),
     ]);
+    await BlocksoftCryptoLog.log('@solana createProgramAddress started')
     let hash = Buffer.from(await BlocksoftCryptoUtils.sha256(buffer.toString('hex')), 'hex')
     let publicKeyBytes = new BN(hash, 16).toArray(undefined, 32);
     if (is_on_curve(publicKeyBytes)) {
